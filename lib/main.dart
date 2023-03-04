@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_vorlesung/blocs/bloc/counter_bloc.dart';
 import 'package:flutter_vorlesung/widgets/hit_counter.dart';
 
 void main() {
@@ -38,7 +40,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _counter++;
     });
   }
-  
+
   void _decreaseCounter() {
     setState(() {
       _counter--;
@@ -52,16 +54,27 @@ class _MyHomePageState extends State<MyHomePage> {
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
         title: Text(widget.title),
       ),
-      body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            HitCounter(counter: _counter),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-            ElevatedButton(onPressed: _incrementCounter, child: const Text('Increment')),
-            const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-            ElevatedButton(onPressed: _decreaseCounter, child: const Text('Decrease')),
-          ],
+      body: BlocProvider(
+        create: (context) => CounterBloc(),
+        child: Center(
+          child: BlocBuilder<CounterBloc, CounterState>(
+            builder: (context, state) {
+              return Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  HitCounter(counter: state.counter),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                  ElevatedButton(
+                      onPressed: () => BlocProvider.of<CounterBloc>(context).add(CounterIncrease()),
+                      child: const Text('Increment')),
+                  const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                  ElevatedButton(
+                      onPressed: _decreaseCounter,
+                      child: const Text('Decrease')),
+                ],
+              );
+            },
+          ),
         ),
       ),
     );
