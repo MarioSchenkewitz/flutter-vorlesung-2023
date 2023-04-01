@@ -39,17 +39,31 @@ class _MyHomePageState extends State<MyHomePage> {
   static const TextStyle optionStyle =
       TextStyle(fontSize: 30, fontWeight: FontWeight.bold);
 
-  final List<Widget> _widgetOptions = <Widget>[
-    _HomeContent(),
-    const Text(
-      'Index 1: Business',
-      style: optionStyle,
-    ),
-    const Text(
-      'Index 2: School',
-      style: optionStyle,
-    ),
-  ];
+  void _setAppTitle(String newAppTitle) {
+    setState(() {
+      appTitle = newAppTitle;
+    });
+  }
+
+  @override
+  void initState() {
+    _widgetOptions = <Widget>[
+      _HomeContent(
+        onNameChange: (name) => _setAppTitle(name),
+      ),
+      const Text(
+        'Index 1: Business',
+        style: optionStyle,
+      ),
+      const Text(
+        'Index 2: School',
+        style: optionStyle,
+      ),
+    ];
+    super.initState();
+  }
+
+  late List<Widget> _widgetOptions;
 
   void _onItemTapped(int index) {
     setState(() {
@@ -91,41 +105,41 @@ class _MyHomePageState extends State<MyHomePage> {
 }
 
 class _HomeContent extends StatelessWidget {
-  //String? appTitle;
+  final Function(String) onNameChange;
+
+  const _HomeContent({super.key, required this.onNameChange});
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-        create: (context) => CounterBloc(),
-        child: Center(
-          child: BlocBuilder<CounterBloc, CounterState>(
-            builder: (context, state) {
-              return Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: <Widget>[
-                  HitCounter(counter: state.counter),
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                  ElevatedButton(
-                      onPressed: () => BlocProvider.of<CounterBloc>(context)
-                          .add(CounterIncrease()),
-                      child: const Text('Increment')),
-                  const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
-                  ElevatedButton(
-                      onPressed: () => BlocProvider.of<CounterBloc>(context)
-                          .add(CounterDecrease()),
-                      child: const Text('Decrease')),
-                  TextField(
-                    decoration: const InputDecoration(labelText: "App Title"),
-                    onChanged: (value) {
-                      //setState(() {
-                      //  appTitle = value;
-                      //});
-                    },
-                  ),
-                ],
-              );
-            },
-          ),
+      create: (context) => CounterBloc(),
+      child: Center(
+        child: BlocBuilder<CounterBloc, CounterState>(
+          builder: (context, state) {
+            return Column(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                HitCounter(counter: state.counter),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                ElevatedButton(
+                    onPressed: () => BlocProvider.of<CounterBloc>(context)
+                        .add(CounterIncrease()),
+                    child: const Text('Increment')),
+                const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
+                ElevatedButton(
+                    onPressed: () => BlocProvider.of<CounterBloc>(context)
+                        .add(CounterDecrease()),
+                    child: const Text('Decrease')),
+                TextField(
+                  decoration: const InputDecoration(labelText: "App Title"),
+                  onChanged: (value) {
+                    onNameChange(value);
+                  },
+                ),
+              ],
+            );
+          },
         ),
-      );
+      ),
+    );
   }
 }
