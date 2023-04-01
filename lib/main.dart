@@ -33,13 +33,14 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  String? appTitle;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         backgroundColor: Theme.of(context).colorScheme.inversePrimary,
-        title: Text(widget.title),
+        title: Text(appTitle ?? "Standard Title"),
       ),
       body: BlocProvider(
         create: (context) => CounterBloc(),
@@ -61,26 +62,11 @@ class _MyHomePageState extends State<MyHomePage> {
                           .add(CounterDecrease()),
                       child: const Text('Decrease')),
                   TextField(
-                    //controller: _controller,
-                    onSubmitted: (String value) async {
-                      await showDialog<void>(
-                        context: context,
-                        builder: (BuildContext context) {
-                          return AlertDialog(
-                            title: const Text('Thanks!'),
-                            content: Text(
-                                'You typed "$value", which has length ${value.characters.length}.'),
-                            actions: <Widget>[
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pop(context);
-                                },
-                                child: const Text('OK'),
-                              ),
-                            ],
-                          );
-                        },
-                      );
+                    decoration: const InputDecoration(labelText: "App Title"),
+                    onChanged: (value) {
+                      setState(() {
+                        appTitle = value;
+                      });
                     },
                   ),
                 ],
