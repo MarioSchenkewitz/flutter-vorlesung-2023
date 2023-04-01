@@ -65,12 +65,37 @@ class _MyHomePageState extends State<MyHomePage> {
                   HitCounter(counter: state.counter),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                   ElevatedButton(
-                      onPressed: () => BlocProvider.of<CounterBloc>(context).add(CounterIncrease()),
+                      onPressed: () => BlocProvider.of<CounterBloc>(context)
+                          .add(CounterIncrease()),
                       child: const Text('Increment')),
                   const Padding(padding: EdgeInsets.symmetric(vertical: 5)),
                   ElevatedButton(
-                      onPressed: _decreaseCounter,
+                      onPressed: () => BlocProvider.of<CounterBloc>(context)
+                          .add(CounterDecrease()),
                       child: const Text('Decrease')),
+                  TextField(
+                    //controller: _controller,
+                    onSubmitted: (String value) async {
+                      await showDialog<void>(
+                        context: context,
+                        builder: (BuildContext context) {
+                          return AlertDialog(
+                            title: const Text('Thanks!'),
+                            content: Text(
+                                'You typed "$value", which has length ${value.characters.length}.'),
+                            actions: <Widget>[
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pop(context);
+                                },
+                                child: const Text('OK'),
+                              ),
+                            ],
+                          );
+                        },
+                      );
+                    },
+                  ),
                 ],
               );
             },

@@ -9,5 +9,8 @@ class CounterBloc extends Bloc<CounterEvent, CounterState> {
     on<CounterIncrease>((event, emit) {
       emit(CounterChanged(counter: state.counter + 1));
     });
+    on<CounterDecrease>((event, emit) {
+      emit(CounterChanged(counter: state.counter - 1));
+    });
   }
 }
