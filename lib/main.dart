@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_vorlesung/blocs/bloc/counter_bloc.dart';
+import 'package:flutter_vorlesung/repository/todo_repository.dart';
 import 'package:flutter_vorlesung/widgets/hit_counter.dart';
+import 'package:flutter_vorlesung/widgets/todo_page.dart';
 
 void main() {
   runApp(const MyApp());
@@ -51,10 +53,7 @@ class _MyHomePageState extends State<MyHomePage> {
       _HomeContent(
         onNameChange: (name) => _setAppTitle(name),
       ),
-      const Text(
-        'Index 1: Business',
-        style: optionStyle,
-      ),
+      TodoPage(),
       const Text(
         'Index 2: School',
         style: optionStyle,
